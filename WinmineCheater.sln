@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinmineCheater", "WinmineCheater\WinmineCheater.csproj", "{315E0579-5CE4-4446-AA2F-C5EBE778A6AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{315E0579-5CE4-4446-AA2F-C5EBE778A6AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315E0579-5CE4-4446-AA2F-C5EBE778A6AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315E0579-5CE4-4446-AA2F-C5EBE778A6AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315E0579-5CE4-4446-AA2F-C5EBE778A6AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6B92FD2-1844-4ECF-8203-A5C5873D8FD3}
+	EndGlobalSection
+EndGlobal
