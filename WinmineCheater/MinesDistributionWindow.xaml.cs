@@ -167,7 +167,7 @@ namespace WinmineCheater
                                 };
                             }
                             // Flag
-                            else if (arrMines[i, j] == 0x8E)
+                            else if (arrMines[i, j] == 0x8E || arrMines[i, j] == 0x0E)
                             {
                                 Image img = new Image()
                                 {
@@ -178,7 +178,7 @@ namespace WinmineCheater
                                 lbl.Content = img;
                             }
                             // "?" signature
-                            else if (arrMines[i, j] == 0x8D)
+                            else if (arrMines[i, j] == 0x8D || arrMines[i, j] == 0x0D)
                             {
                                 lbl.FontWeight = FontWeights.Bold;
                                 lbl.Content = "?";
