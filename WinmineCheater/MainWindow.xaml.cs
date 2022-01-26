@@ -158,7 +158,7 @@ namespace WinmineCheater
         private void StartWinmine()
         {
             // Process handle.
-            IntPtr handleProgress = Win32Api.OpenProcess(0x1F0FFF, false, Pid);
+            // IntPtr handleProgress = Win32Api.OpenProcess(0x1F0FFF, false, Pid);
 
             string title = Process.GetProcessById(Pid).MainWindowTitle;
 
