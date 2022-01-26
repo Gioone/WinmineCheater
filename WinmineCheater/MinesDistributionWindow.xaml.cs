@@ -68,15 +68,6 @@ namespace WinmineCheater
                 }
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    /*foreach (var item in Grid.Children)
-                    {
-                        Label? lbl = item as Label;
-                        if (lbl is not null)
-                        {
-                            lbl.Background = null;
-
-                        }
-                    }*/
                     Grid.Children.Clear();
                     Grid.RowDefinitions.Clear();
                     Grid.ColumnDefinitions.Clear();
@@ -106,84 +97,8 @@ namespace WinmineCheater
                     {
                         for (int j = 0; j < columns; j++)
                         {
-                            Label lbl = new()
-                            {
-                                Width = 20,
-                                Height = 20,
-                                Padding = new Thickness(3, 3, 3, 3),
-                                HorizontalContentAlignment = HorizontalAlignment.Center,
-                                VerticalContentAlignment = VerticalAlignment.Center,
-                                Content = ""
-                            };
-                            // Number
-                            if (arrMines[i, j] >= 'A' - 1 && arrMines[i, j] <= 'J')
-                            {
-                                int num = arrMines[i, j] - 64;
-                                if (num == 0)
-                                {
-                                    lbl.Content = "";
-                                }
-                                else
-                                {
-                                    switch (num)
-                                    {
-                                        case 1:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Blue);
-                                            break;
-                                        case 2:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Green);
-                                            break;
-                                        case 3:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Red);
-                                            break;
-                                        case 4:
-                                            lbl.Foreground = new SolidColorBrush(Colors.DarkBlue);
-                                            break;
-                                        case 5:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Brown);
-                                            break;
-                                        case 6:
-                                            lbl.Foreground = new SolidColorBrush(Colors.LightGreen);
-                                            break;
-                                        case 7:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Black);
-                                            break;
-                                        case 8:
-                                            lbl.Foreground = new SolidColorBrush(Colors.Gray);
-                                            break;
-                                    }
-                                    lbl.FontWeight = FontWeights.Bold;
-                                    lbl.Content = num.ToString();
-                                }
-                            }
-                            // Mine
-                            else if (arrMines[i, j] == 0xCC || arrMines[i, j] == 0x8F)
-                            {
-                                // lbl.Background = new ImageBrush(img);
-                                // lbl.Background = new ImageBrush(ByteArrayToBitmapImage(Properties.Resources.Icon));
-                                lbl.Background = new ImageBrush()
-                                {
-                                    ImageSource = new BitmapImage(new Uri(@"Images\Icon.png", UriKind.Relative)),
-                                };
-                            }
-                            // Flag
-                            else if (arrMines[i, j] == 0x8E || arrMines[i, j] == 0x0E)
-                            {
-                                Image img = new Image()
-                                {
-                                    Source = new BitmapImage(new Uri(@"Images\Flag.png", UriKind.RelativeOrAbsolute)),
-                                    Stretch = Stretch.Uniform
-                                };
-                                lbl.Padding = new Thickness(2);
-                                lbl.Content = img;
-                            }
-                            // "?" signature
-                            else if (arrMines[i, j] == 0x8D || arrMines[i, j] == 0x0D)
-                            {
-                                lbl.FontWeight = FontWeights.Bold;
-                                lbl.Content = "?";
-                                lbl.Foreground = new SolidColorBrush(Colors.Black);
-                            }
+                            Label lbl = GenerateGridLabel(arrMines[i, j]);
+                            
                             Grid.Children.Add(lbl);
                             lbl.SetValue(Grid.RowProperty, i);
                             lbl.SetValue(Grid.ColumnProperty, j);
@@ -192,6 +107,94 @@ namespace WinmineCheater
                 });
                 Thread.Sleep(1000);
             }
+        }
+
+        /// <summary>
+        /// Generate grid label.
+        /// </summary>
+        /// <param name="value">An array element from reading memory.</param>
+        /// <returns><seealso cref="Label" /></returns>
+        private Label GenerateGridLabel(byte value)
+        {
+            Label lbl = new()
+            {
+                Width = 20,
+                Height = 20,
+                Padding = new Thickness(3, 3, 3, 3),
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Content = ""
+            };
+            // Number
+            if (value >= 'A' - 1 && value <= 'J')
+            {
+                int num = value - 64;
+                if (num == 0)
+                {
+                    lbl.Content = "";
+                }
+                else
+                {
+                    switch (num)
+                    {
+                        case 1:
+                            lbl.Foreground = new SolidColorBrush(Colors.Blue);
+                            break;
+                        case 2:
+                            lbl.Foreground = new SolidColorBrush(Colors.Green);
+                            break;
+                        case 3:
+                            lbl.Foreground = new SolidColorBrush(Colors.Red);
+                            break;
+                        case 4:
+                            lbl.Foreground = new SolidColorBrush(Colors.DarkBlue);
+                            break;
+                        case 5:
+                            lbl.Foreground = new SolidColorBrush(Colors.Brown);
+                            break;
+                        case 6:
+                            lbl.Foreground = new SolidColorBrush(Colors.LightGreen);
+                            break;
+                        case 7:
+                            lbl.Foreground = new SolidColorBrush(Colors.Black);
+                            break;
+                        case 8:
+                            lbl.Foreground = new SolidColorBrush(Colors.Gray);
+                            break;
+                    }
+                    lbl.FontWeight = FontWeights.Bold;
+                    lbl.Content = num.ToString();
+                }
+            }
+            // Mine
+            else if (value == 0xCC || value == 0x8F)
+            {
+                // lbl.Background = new ImageBrush(img);
+                // lbl.Background = new ImageBrush(ByteArrayToBitmapImage(Properties.Resources.Icon));
+                lbl.Background = new ImageBrush()
+                {
+                    ImageSource = new BitmapImage(new Uri(@"Images\Icon.png", UriKind.Relative)),
+                };
+            }
+            // Flag
+            else if (value == 0x8E || value == 0x0E)
+            {
+                Image img = new Image()
+                {
+                    Source = new BitmapImage(new Uri(@"Images\Flag.png", UriKind.RelativeOrAbsolute)),
+                    Stretch = Stretch.Uniform
+                };
+                lbl.Padding = new Thickness(2);
+                lbl.Content = img;
+            }
+            // "?" signature
+            else if (value == 0x8D || value == 0x0D)
+            {
+                lbl.FontWeight = FontWeights.Bold;
+                lbl.Content = "?";
+                lbl.Foreground = new SolidColorBrush(Colors.Black);
+            }
+            return lbl;
         }
 
         private void InitUi(int rows, int columns)

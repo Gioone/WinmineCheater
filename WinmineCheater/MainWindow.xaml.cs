@@ -210,10 +210,37 @@ namespace WinmineCheater
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    if (array[i, j] != 0x8F && array[i, j] != 0xCC)
+                    // The grid is not been clicked and it is a normal grid.
+                    if (array[i, j] == 0x0F)
                     {
                         // Set cursor position.
                         Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                        // Mouse down.
+                        Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                        // Mouse up.
+                        Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                    }
+                    // The grid has been signed as flag by player and it is a normal grid.
+                    else if (array[i, j] == 0x0E)
+                    {
+                        // Set cursor position.
+                        Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                        // Mouse down.
+                        Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                        // Mouse up.
+                        Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                    }
+                    // The grid has been signed as "?" by player and it is a mormal grid.
+                    else if (array[i, j] == 0x0D)
+                    {
+                        // Set cursor position.
+                        Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                         // Mouse down.
                         Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
                         // Mouse up.

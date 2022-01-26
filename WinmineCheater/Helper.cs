@@ -26,6 +26,12 @@ namespace WinmineCheater
             return 0;
         }
 
+        /// <summary>
+        /// Reading a byte from Winmine.exe memory.
+        /// </summary>
+        /// <param name="baseAddress">Address</param>
+        /// <param name="iPid">Process ID</param>
+        /// <returns>Reading result.</returns>
         public static byte ReadMemoryValueByte(int baseAddress, int iPid)
         {
             try
@@ -37,9 +43,8 @@ namespace WinmineCheater
                 IntPtr hProcess = Win32Api.OpenProcess(0x1F0FFF, false, iPid);
                 //將制定內存中的值讀入緩沖區
                 Win32Api.ReadProcessMemory(hProcess, (IntPtr)baseAddress, byteAddress, 1, IntPtr.Zero);
-                //關閉操作
                 Win32Api.CloseHandle(hProcess);
-                //從非托管內存中讀取一個 1 位无符號整數。
+                // Reading a byte from unmanaged memory.
                 return Marshal.ReadByte(byteAddress);
             }
             catch

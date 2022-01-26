@@ -6,9 +6,13 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Images\Icon_16x16.ico</ApplicationIcon>
+    <UseWindowsForms>False</UseWindowsForms>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="FodyWeavers.xml" />
     <None Remove="Images\Flag.png" />
     <None Remove="Images\Icon.png" />
   </ItemGroup>
