@@ -206,6 +206,7 @@ namespace WinmineCheater
             int left = rect.Left + 13 + 7;  // Get first grid's X point.
             int top = rect.Top + 101 + 7;  // Get first grid's Y point.
 
+            Win32Api.BlockInput(true);
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
@@ -248,6 +249,7 @@ namespace WinmineCheater
                     }
                 }
             }
+            Win32Api.BlockInput(false);
         }
 
     }

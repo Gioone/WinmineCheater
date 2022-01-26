@@ -12,6 +12,13 @@ namespace WinmineCheater
         #region WinAPI
 
         /// <summary>
+        /// Is locked mouse and keyboard.
+        /// </summary>
+        /// <param name="Block"><see langword="true" /> if locked mouse and keyboard, <see langword="false" /> if unlocked.</param>
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern void BlockInput(bool Block);
+
+        /// <summary>
         /// Simulate mouse click.
         /// </summary>
         /// <param name="flags"></param>
