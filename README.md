@@ -6,6 +6,9 @@ Go to point. Winmine Cheater is a software can show mines distribution and auto 
 
 ![image](https://github.com/Gioone/WinmineCheater/blob/master/WinmineCheater/Images/ProjectImage.png)
 
+# Running requirements
+Your computer should install Dot Net 6 running environment first.
+
 # How to use
 * Download the release version.
 * Unzip the zip.
