@@ -14,5 +14,9 @@
         /// Mine start address.
         /// </summary>
         internal static readonly int MINE_START_ADDRESS = 0x01005361;
+        /// <summary>
+        /// Is enable "?" signature. 1: Enable, 2: Disable.
+        /// </summary>
+        internal static readonly int IS_ENABLE_QUESTION_MARK = 0x010056BC;
     }
 }

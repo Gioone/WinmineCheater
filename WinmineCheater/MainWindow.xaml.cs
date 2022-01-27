@@ -157,14 +157,17 @@ namespace WinmineCheater
 
         private void StartWinmine()
         {
+            // Is enable "?" signature.
+            bool isEnableQuestionMark = Helper.ReadMemoryValueByte(Address.IS_ENABLE_QUESTION_MARK, Pid) == 1;
             // Process handle.
             // IntPtr handleProgress = Win32Api.OpenProcess(0x1F0FFF, false, Pid);
 
+            // Get window title.
             string title = Process.GetProcessById(Pid).MainWindowTitle;
 
             IntPtr hwnd = Win32Api.FindWindow(null, title);
 
-            // Active winmine window.
+            // Active Winmine window.
             Win32Api.SetForegroundWindow(hwnd);
             RECT rect = new();
 
@@ -211,7 +214,7 @@ namespace WinmineCheater
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    // The grid is not been clicked and it is a normal grid.
+                    // The grid has not been clicked and it is a normal grid.
                     if (array[i, j] == 0x0F)
                     {
                         // Set cursor position.
@@ -224,16 +227,30 @@ namespace WinmineCheater
                     // The grid has been signed as flag by player and it is a normal grid.
                     else if (array[i, j] == 0x0E)
                     {
-                        // Set cursor position.
-                        Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                        // Mouse down.
-                        Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
-                        // Mouse up.
-                        Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                        if (isEnableQuestionMark)
+                        {
+                            // Set cursor position.
+                            Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse down.
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse up.
+                            Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                        }
+                        else
+                        {
+                            // Set cursor position.
+                            Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse down.
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse up.
+                            Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                        }
                     }
                     // The grid has been signed as "?" by player and it is a mormal grid.
                     else if (array[i, j] == 0x0D)

@@ -98,7 +98,7 @@ namespace WinmineCheater
                         for (int j = 0; j < columns; j++)
                         {
                             Label lbl = GenerateGridLabel(arrMines[i, j]);
-                            
+
                             Grid.Children.Add(lbl);
                             lbl.SetValue(Grid.RowProperty, i);
                             lbl.SetValue(Grid.ColumnProperty, j);
@@ -318,7 +318,9 @@ namespace WinmineCheater
                 }
                 // Go to next row.
                 rowAddress += 0x20;
+
             }
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
