@@ -5,10 +5,10 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Images\Icon_16x16.ico</ApplicationIcon>
+    <ApplicationIcon>Images\Icon_64x64.ico</ApplicationIcon>
     <UseWindowsForms>False</UseWindowsForms>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <FileVersion>2.2.0.0</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
@@ -26,7 +26,7 @@
     <Content Include="Images\Icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Icon_16x16.ico" />
+    <Content Include="Images\Icon_64x64.ico" />
   </ItemGroup>
 
   <ItemGroup>
