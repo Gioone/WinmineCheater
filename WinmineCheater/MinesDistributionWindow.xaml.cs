@@ -1,36 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace WinmineCheater
 {
+    
     /// <summary>
     /// MinesDistributionWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MinesDistributionWindow : Window
     {
+        
         private readonly object _lockIsStopTrdRefreshUi = new();
-        private bool _isStopTrdRefreshUi = false;
+        private bool _isStopTrdRefreshUi;
         public bool IsStopTrdRefreshUi
         {
-            get
-            {
-                return _isStopTrdRefreshUi;
-            }
+            get => _isStopTrdRefreshUi;
             set
             {
                 lock (_lockIsStopTrdRefreshUi)
@@ -39,12 +28,13 @@ namespace WinmineCheater
                 }
             }
         }
+
         private Thread _trdRefreshUi;
-        private byte[,] arrMines;
+        private byte[,] _arrMines;
         public MinesDistributionWindow(int rows, int columns)
         {
             InitializeComponent();
-            arrMines = new byte[rows, columns];
+            _arrMines = new byte[rows, columns];
             Height = rows * 25;
             Width = columns * 22;
             ReadGridMines(rows, columns);
@@ -61,6 +51,7 @@ namespace WinmineCheater
             while (true)
             {
                 if (IsStopTrdRefreshUi) return;
+                // Game is not running.
                 if (MainWindow.Pid == 0)
                 {
                     Thread.Sleep(1000);
@@ -91,13 +82,13 @@ namespace WinmineCheater
                         };
                         Grid.ColumnDefinitions.Add(column);
                     }
-                    arrMines = new byte[rows, columns];
+                    _arrMines = new byte[rows, columns];
                     ReadGridMines(rows, columns);
                     for (int i = 0; i < rows; i++)
                     {
                         for (int j = 0; j < columns; j++)
                         {
-                            Label lbl = GenerateGridLabel(arrMines[i, j]);
+                            Label lbl = GenerateGridLabel(_arrMines[i, j]);
 
                             Grid.Children.Add(lbl);
                             lbl.SetValue(Grid.RowProperty, i);
@@ -174,14 +165,27 @@ namespace WinmineCheater
                 lbl.Background = new ImageBrush()
                 {
                     ImageSource = new BitmapImage(new Uri(@"Images\Icon.png", UriKind.Relative)),
+                    // ImageSource = new BitmapImage(new Uri(@"pack://application:,,,/images/Icon.png", UriKind.Relative)),
                 };
+                if (value != 0xCC) return lbl;
+                // value == 0xCC
+                /*lbl.Background = new SolidColorBrush(Colors.Red);
+                BitmapImage lblContentImage = new(new Uri(@"Images\Icon.png", UriKind.Relative));
+                Image img = new()
+                {
+                    Source = lblContentImage,
+                    Stretch = Stretch.Uniform
+                };
+                lbl.Padding = new Thickness(2);
+                lbl.Content = img;*/
             }
             // Flag
             else if (value == 0x8E || value == 0x0E)
             {
                 Image img = new Image()
                 {
-                    Source = new BitmapImage(new Uri(@"Images\Flag.png", UriKind.RelativeOrAbsolute)),
+                    // Source = new BitmapImage(new Uri(@"Images\Flag.png", UriKind.RelativeOrAbsolute)),
+                    Source = new BitmapImage(new Uri(@"pack://application:,,,/images/Flag.png", UriKind.RelativeOrAbsolute)),
                     Stretch = Stretch.Uniform
                 };
                 lbl.Padding = new Thickness(2);
@@ -230,9 +234,9 @@ namespace WinmineCheater
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         VerticalContentAlignment = VerticalAlignment.Center
                     };
-                    if (arrMines[i, j] >= 'A' - 1 && arrMines[i, j] <= 'J')
+                    if (_arrMines[i, j] >= 'A' - 1 && _arrMines[i, j] <= 'J')
                     {
-                        int num = arrMines[i, j] - 64;
+                        int num = _arrMines[i, j] - 64;
                         if (num == 0)
                         {
                             lbl.Content = "";
@@ -270,7 +274,7 @@ namespace WinmineCheater
                             lbl.Content = num.ToString();
                         }
                     }
-                    else if (arrMines[i, j] == 0xCC || arrMines[i, j] == 0x8F)
+                    else if (_arrMines[i, j] == 0xCC || _arrMines[i, j] == 0x8F)
                     {
                         /*BitmapImage img = new(new Uri(@"images\icon.png", UriKind.Relative))
                         {
@@ -313,7 +317,7 @@ namespace WinmineCheater
                 for (int j = 0; j < columns; j++)
                 {
                     byte value = Helper.ReadMemoryValueByte(mineAddress, MainWindow.Pid);
-                    arrMines[i, j] = value;
+                    _arrMines[i, j] = value;
                     mineAddress++;
                 }
                 // Go to next row.
@@ -326,7 +330,7 @@ namespace WinmineCheater
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsStopTrdRefreshUi = true;
-            Helper.IsMinesDeistributionWindowOpend = false;
+            Helper.IsMinesDistributionWindowOpened = false;
         }
     }
 }

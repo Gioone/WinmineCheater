@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WinmineCheater
 {
@@ -23,8 +10,8 @@ namespace WinmineCheater
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly object _lockPid = new object();
-        internal static int _pid = 0;
+        private static readonly object _lockPid = new();
+        private static int _pid;
         internal static int Pid
         {
             set
@@ -34,19 +21,13 @@ namespace WinmineCheater
                     _pid = value;
                 }
             }
-            get
-            {
-                return _pid;
-            }
+            get => _pid;
         }
         private readonly object _lockIsStopTrdCheckGameIsRunning = new();
-        private bool _isStopTrdCheckGameIsRunning = false;
+        private bool _isStopTrdCheckGameIsRunning;
         public bool IsStopTrdCheckGameIsRunning
         {
-            get
-            {
-                return _isStopTrdCheckGameIsRunning;
-            }
+            get => _isStopTrdCheckGameIsRunning;
             set
             {
                 lock (_lockIsStopTrdCheckGameIsRunning)
@@ -56,15 +37,11 @@ namespace WinmineCheater
             }
         }
 
-        private Thread? _trdCheckGameIsRunning;
         private readonly object _lockIsEnableControls = new();
-        private bool _isEnabledControls = false;
+        private bool _isEnabledControls;
         public bool IsEnabledControls
         {
-            get
-            {
-                return _isEnabledControls;
-            }
+            get => _isEnabledControls;
             set
             {
                 lock (_lockIsEnableControls)
@@ -75,8 +52,9 @@ namespace WinmineCheater
         }
         public MainWindow()
         {
+            string str = new string("");
             InitializeComponent();
-            _trdCheckGameIsRunning = new Thread(() =>
+            var trdCheckGameIsRunning = new Thread(() =>
             {
                 while (!IsStopTrdCheckGameIsRunning)
                 {
@@ -85,10 +63,7 @@ namespace WinmineCheater
                     {
                         if (!IsEnabledControls)
                         {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                EnableControls();
-                            });
+                            Application.Current.Dispatcher.Invoke(EnableControls);
                             IsEnabledControls = true;
                         }
                     }
@@ -96,10 +71,7 @@ namespace WinmineCheater
                     {
                         if (IsEnabledControls)
                         {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                DisableControls();
-                            });
+                            Application.Current.Dispatcher.Invoke(DisableControls);
                             IsEnabledControls = false;
                         }
                     }
@@ -110,7 +82,7 @@ namespace WinmineCheater
             {
                 IsBackground = true
             };
-            _trdCheckGameIsRunning.Start();
+            trdCheckGameIsRunning.Start();
 
         }
 
@@ -134,13 +106,13 @@ namespace WinmineCheater
 
         private void BtnShowMines_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.IsMinesDeistributionWindowOpend) return;
+            if (Helper.IsMinesDistributionWindowOpened) return;
             IntPtr hProcess = Win32Api.OpenProcess(0x1F0FFF/*Highest permission*/, false, Pid);
             byte rows = Helper.ReadMemoryValueByte(Address.ROW_ADDRESS, Pid);
             byte columns = Helper.ReadMemoryValueByte(Address.COLUMN_ADDRESS, Pid);
             Win32Api.CloseHandle(hProcess);
             new MinesDistributionWindow(rows, columns).Show();
-            Helper.IsMinesDeistributionWindowOpend = true;
+            Helper.IsMinesDistributionWindowOpened = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -151,11 +123,10 @@ namespace WinmineCheater
 
         private void BtnStartWinmine_Click(object sender, RoutedEventArgs e)
         {
-
             StartWinmine();
         }
 
-        private void StartWinmine()
+        private static void StartWinmine()
         {
             // Is enable "?" signature.
             bool isEnableQuestionMark = Helper.ReadMemoryValueByte(Address.IS_ENABLE_QUESTION_MARK, Pid) == 1;
@@ -209,6 +180,8 @@ namespace WinmineCheater
             int left = rect.Left + 13 + 7;  // Get first grid's X point.
             int top = rect.Top + 101 + 7;  // Get first grid's Y point.
 
+            
+            
             Win32Api.BlockInput(true);
             for (int i = 0; i < rows; i++)
             {
@@ -220,9 +193,9 @@ namespace WinmineCheater
                         // Set cursor position.
                         Win32Api.SetCursorPos(left + j * 16, top + i * 16);
                         // Mouse down.
-                        Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                         // Mouse up.
-                        Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                        // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                     }
                     // The grid has been signed as flag by player and it is a normal grid.
                     else if (array[i, j] == 0x0E)
@@ -231,38 +204,38 @@ namespace WinmineCheater
                         {
                             // Set cursor position.
                             Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse down.
-                            Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse up.
-                            Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                         }
                         else
                         {
                             // Set cursor position.
                             Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                            Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                            Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse down.
-                            Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse up.
-                            Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                         }
                     }
-                    // The grid has been signed as "?" by player and it is a mormal grid.
+                    // The grid has been signed as "?" by player and it is a normal grid.
                     else if (array[i, j] == 0x0D)
                     {
                         // Set cursor position.
                         Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                        Win32Api.mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
-                        Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                        // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                         // Mouse down.
-                        Win32Api.mouse_event(MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
+                        Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                         // Mouse up.
-                        Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                        // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                     }
                 }
             }

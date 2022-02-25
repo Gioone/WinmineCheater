@@ -1,21 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WinmineCheater
 {
-    internal class Helper
+    internal static class Helper
     {
-        internal static bool IsMinesDeistributionWindowOpend { get; set; } = false;
+        internal static bool IsMinesDistributionWindowOpened { get; set; }
+
+        /// <summary>
+        /// Get MineSweeper PID.
+        /// </summary>
+        /// <returns>MineSweeper process PID. 0 found failed.</returns>
+        internal static int GetMineSweeperPid()
+        {
+            Process[] processes = Process.GetProcessesByName("MineSweeper");
+            foreach (Process process in processes)
+            {
+                return process.Id;
+            }
+            return 0;
+        }
 
         /// <summary>
         /// Get Winmine PID.
         /// </summary>
-        /// <returns>Process PID. 0 found failed.</returns>
+        /// <returns>Winmine process PID. 0 found failed.</returns>
         internal static int GetWinminePid()
         {
             Process[] processes = Process.GetProcessesByName("Winmine");

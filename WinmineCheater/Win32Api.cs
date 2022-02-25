@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WinmineCheater
 {
-    internal class Win32Api
+    internal static class Win32Api
     {
         #region WinAPI
 
         /// <summary>
         /// Is locked mouse and keyboard.
         /// </summary>
-        /// <param name="Block"><see langword="true" /> if locked mouse and keyboard, <see langword="false" /> if unlocked.</param>
+        /// <param name="block"><see langword="true" /> if locked mouse and keyboard, <see langword="false" /> if unlocked.</param>
         [DllImport("user32.dll", SetLastError = true)]
-        internal static extern void BlockInput(bool Block);
+        internal static extern void BlockInput(bool block);
 
         /// <summary>
         /// Simulate mouse click.
@@ -39,13 +35,12 @@ namespace WinmineCheater
         internal static extern bool SetCursorPos(int x, int y);
 
         /// <summary>
-        /// Get Windoe RECT.
+        /// Get Window RECT.
         /// </summary>
         /// <param name="hwnd">Window handle.</param>
         /// <param name="lpRect">RECT</param>
         /// <returns><see langword="true" /> if successful, <see langword="false" /> if failed.</returns>
         [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool GetWindowRect(IntPtr hwnd, ref RECT lpRect);
 
         /// <summary>
@@ -89,19 +84,19 @@ namespace WinmineCheater
         /// Get process ID.
         /// </summary>
         /// <param name="hwnd">Window Handle</param>
-        /// <param name="ID"></param>
+        /// <param name="id"></param>
         /// <returns>Process ID. <see langword="0" /> if failed. <see langword="Greater 0" /> successful.</returns>
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int ID);
+        public static extern int GetWindowThreadProcessId(IntPtr hwnd, out int id);
 
         /// <summary>
         /// Get window handle.
         /// </summary>
         /// <param name="lpClassName">Class name</param>
         /// <param name="lpWindowName">Window name</param>
-        /// <returns>Window handle./returns>
-        [DllImport("user32.dll", EntryPoint = "FindWindow")]
-        public extern static IntPtr FindWindow(string? lpClassName, string lpWindowName);
+        /// <returns>Window handle.</returns>
+        [DllImport("user32.dll", EntryPoint = "FindWindow", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow(string? lpClassName, string lpWindowName);
 
         /// <summary>
         /// 写入进程内存
