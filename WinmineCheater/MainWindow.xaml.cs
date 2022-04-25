@@ -52,7 +52,6 @@ namespace WinmineCheater
         }
         public MainWindow()
         {
-            string str = new string("");
             InitializeComponent();
             var trdCheckGameIsRunning = new Thread(() =>
             {
@@ -187,21 +186,19 @@ namespace WinmineCheater
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    // The grid has not been clicked and it is a normal grid.
-                    if (array[i, j] == 0x0F)
+                    switch (array[i, j])
                     {
-                        // Set cursor position.
-                        Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                        // Mouse down.
-                        Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
-                        // Mouse up.
-                        // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
-                    }
-                    // The grid has been signed as flag by player and it is a normal grid.
-                    else if (array[i, j] == 0x0E)
-                    {
-                        if (isEnableQuestionMark)
-                        {
+                        // The grid has not been clicked and it is a normal grid.
+                        case 0x0F:
+                            // Set cursor position.
+                            Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                            // Mouse down.
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse up.
+                            // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            break;
+                        // The grid has been signed as flag by player and it is a normal grid.
+                        case 0x0E when isEnableQuestionMark:
                             // Set cursor position.
                             Win32Api.SetCursorPos(left + j * 16, top + i * 16);
                             Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
@@ -212,30 +209,28 @@ namespace WinmineCheater
                             Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse up.
                             // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
-                        }
-                        else
-                        {
+                            break;
+                        case 0x0E:
                             // Set cursor position.
                             Win32Api.SetCursorPos(left + j * 16, top + i * 16);
                             Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                             // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse down.
-                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
                             // Mouse up.
                             // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
-                        }
-                    }
-                    // The grid has been signed as "?" by player and it is a normal grid.
-                    else if (array[i, j] == 0x0D)
-                    {
-                        // Set cursor position.
-                        Win32Api.SetCursorPos(left + j * 16, top + i * 16);
-                        Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                        // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                        // Mouse down.
-                        Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
-                        // Mouse up.
-                        // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            break;
+                        // The grid has been signed as "?" by player and it is a normal grid.
+                        case 0x0D:
+                            // Set cursor position.
+                            Win32Api.SetCursorPos(left + j * 16, top + i * 16);
+                            Win32Api.mouse_event(MouseEventFlag.RightDown | MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Win32Api.mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse down.
+                            Win32Api.mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            // Mouse up.
+                            // Win32Api.mouse_event(MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+                            break;
                     }
                 }
             }
